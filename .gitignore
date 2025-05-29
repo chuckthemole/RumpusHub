@@ -1,0 +1,14 @@
+# Ignore everything
+*
+
+# Allow Git to keep this .gitignore file itself
+!.gitignore
+
+# Keep specific files
+!publish-common.sh
+!build.gradle
+!settings.gradle
+!gradlew
+!gradlew.bat
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
