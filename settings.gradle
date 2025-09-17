@@ -29,11 +29,12 @@ if (envFile.exists()) {
     }
 }
 
-println "📘 settings.gradle ENV: $env"
+println "settings.gradle ENV: $env"
 
+// TODO: build this out a bit more for BETA and LIVE
 if (env == 'DEV') {
     include ':common'
-    project(':common').projectDir = new File(rootDir, 'common')
+    // project(':common').projectDir = new File(rootDir, 'common')
 }
 
 include ':rumpus'

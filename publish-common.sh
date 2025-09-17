@@ -54,4 +54,4 @@ case "$1" in
 esac
 
 echo
-echo "✅ Done publishing!"
+echo "Done publishing!"
