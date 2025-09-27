@@ -6,7 +6,7 @@ This repository is designed to unify development, dependency management, and dep
 
 ---
 
-## 📦 Repository Structure
+## Repository Structure
 
 RumpusHub includes the following subprojects:
 
@@ -19,7 +19,7 @@ Each subproject has its own `build.gradle` file and follows a modular design to 
 
 ---
 
-## 🚀 Why a Monorepo?
+## Monorepo?
 
 The monorepo approach helps:
 
@@ -30,7 +30,7 @@ The monorepo approach helps:
 
 ---
 
-## 🛠️ Development Setup
+## Development Setup
 
 1. Clone the repo:
    ```bash
