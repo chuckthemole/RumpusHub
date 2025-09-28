@@ -1,0 +1,5 @@
+[versions]
+common = "1.1.0"
+
+[libraries]
+common = { module = "com.rumpushub.common:common", version.ref = "common" }
