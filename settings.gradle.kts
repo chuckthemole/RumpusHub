@@ -1,22 +1,27 @@
 import java.io.File
 
-// --------------------------------------------------------------------------
-// Load environment variables from .env (inline version)
-// --------------------------------------------------------------------------
-// This block replaces the external EnvLoader.kts script to ensure Kotlin DSL
-// compatibility. It reads `.env` files from the project root or parent directory.
-//
-// Behavior:
-// - Looks for `.env` in the rootDir, then falls back to rootDir.parentFile
-// - Parses lines in KEY=VALUE format
-// - Ignores comment lines starting with '#' and malformed lines
-// - Strips surrounding quotes (single or double) from values
-// - Sets each property in `settings.extensions.extraProperties` for use throughout
-//   the build script (accessible in Kotlin DSL)
+/*
+ * --------------------------------------------------------------------------
+ * Environment Variable Loader (inline implementation)
+ * --------------------------------------------------------------------------
+ * Purpose:
+ *   - Loads `.env` files at settings evaluation time to make environment
+ *     variables available for conditional project inclusion and configuration.
+ *
+ * Behavior:
+ *   - Searches for `.env` in `rootDir`, falls back to `rootDir.parentFile`.
+ *   - Parses lines in `KEY=VALUE` format.
+ *   - Skips empty lines, comments (#...), and malformed entries.
+ *   - Strips surrounding quotes (single/double) from values.
+ *   - Exposes properties through `settings.extensions.extraProperties`.
+ *
+ * Why inline?
+ *   - Ensures compatibility with the Kotlin DSL, since `apply(from = "...")`
+ *     cannot expose top-level functions in the same way Groovy scripts can.
+ */
 val rootDir = settings.rootDir
 val parentDir = rootDir.parentFile
 
-// Determine the file to read (.env in rootDir preferred)
 val envFile = File(rootDir, ".env").takeIf { it.exists() } ?: File(parentDir, ".env")
 
 if (envFile.exists()) {
@@ -37,92 +42,107 @@ if (envFile.exists()) {
     println("EnvLoader: No .env file found in $rootDir or $parentDir")
 }
 
-// --------------------------------------------------------------------------
-// Determine the current environment
-// --------------------------------------------------------------------------
-// Reads the 'ENV' property from the loaded environment variables. Defaults
-// to "DEV" if not explicitly set. This controls conditional project inclusion
-// and other environment-specific configuration.
+/*
+ * --------------------------------------------------------------------------
+ * Determine Current Environment
+ * --------------------------------------------------------------------------
+ * ENV:
+ *   - Controls conditional inclusion of projects and environment-specific
+ *     dependency resolution.
+ *   - Defaults to "DEV" if not set in `.env`.
+ *
+ * HEAP:
+ *   - Example of an additional environment property.
+ *   - Defaults to "LIMITED_HEAP" if not set.
+ */
 val env: String =
-        if (settings.extensions.extraProperties.has("ENV")) {
-            settings.extensions.extraProperties["ENV"] as String
-        } else {
-            "DEV"
-        }
+    if (settings.extensions.extraProperties.has("ENV")) {
+        settings.extensions.extraProperties["ENV"] as String
+    } else {
+        "DEV"
+    }
 
 println("settings.gradle.kts: Using environment = $env")
 
-// --------------------------------------------------------------------------
-// Optional additional environment variables
-// --------------------------------------------------------------------------
-// Example: HEAP configuration. Defaulting to LIMITED_HEAP if not set in .env
 val heap: String =
-        if (settings.extensions.extraProperties.has("HEAP")) {
-            settings.extensions.extraProperties["HEAP"] as String
-        } else {
-            "LIMITED_HEAP"
-        }
+    if (settings.extensions.extraProperties.has("HEAP")) {
+        settings.extensions.extraProperties["HEAP"] as String
+    } else {
+        "LIMITED_HEAP"
+    }
 
 println("settings.gradle.kts: Using heap configuration = $heap")
 
-// --------------------------------------------------------------------------
-// Include core subprojects
-// --------------------------------------------------------------------------
-// These projects are always included, regardless of environment. Gradle
-// automatically maps the project name to a folder of the same name in rootDir.
+/*
+ * --------------------------------------------------------------------------
+ * Core Project Inclusion
+ * --------------------------------------------------------------------------
+ * These projects are always included, regardless of environment.
+ * Gradle automatically resolves `:projectName` to a folder of the same name.
+ */
 include(":rumpus")
 include(":admin")
 
-// --------------------------------------------------------------------------
-// Include the 'common' project only in DEV environment
-// --------------------------------------------------------------------------
-// In DEV mode, we include the local ':common' project to ensure IDE features
-// like IntelliSense, live reload, and local development work seamlessly. In
-// LIVE/BETA, the published artifact is used instead, avoiding conflicts with
-// Maven/Gradle dependencies.
-//
-// The `projectDir` explicitly maps the logical Gradle project to a physical
-// folder. This is optional if the folder name matches the project name,
-// but makes the configuration explicit and easier to maintain.
-if (env == "DEV") {
+/*
+ * --------------------------------------------------------------------------
+ * Conditional Project Inclusion (DEV or Publishing)
+ * --------------------------------------------------------------------------
+ * In DEV:
+ *   - Includes the local `:common` project to provide IDE navigation,
+ *     live reload, and local development support.
+ *
+ * In BETA/LIVE:
+ *   - Excludes `:common` by default so the published Maven artifact is used
+ *     instead of the local source.
+ *
+ * Exception (Publishing):
+ *   - If the current Gradle invocation includes any `publish*` tasks,
+ *     `:common` must be included so it can be built and published.
+ *   - This ensures `publish-common.sh` and direct `./gradlew publish…`
+ *     commands work regardless of environment (DEV, BETA, or LIVE).
+ *
+ * Implementation Details:
+ *   - `gradle.startParameter.taskNames` contains the names of tasks passed
+ *     to the Gradle invocation (e.g., `publishToMavenLocal`).
+ *   - We check whether any of those task names contain the substring
+ *     "publish" (case-insensitive) to decide whether publishing is active.
+ *   - Explicitly sets `projectDir` for clarity, though not strictly required
+ *     if directory name matches project name.
+ */
+val isPublishing: Boolean = gradle.startParameter.taskNames.any { task ->
+    task.contains("publish", ignoreCase = true)
+}
+
+if (env == "DEV" || isPublishing) {
     include(":common")
     project(":common").projectDir = File(rootDir, "common")
 }
 
-// --------------------------------------------------------------------------
-// Dependency Resolution Management
-// --------------------------------------------------------------------------
-// This block centralizes dependency version control and version catalogs
-// for all subprojects. By using a version catalog, you can:
-//   1. Define dependency versions in a single place (`libs.versions.toml`),
-//      making upgrades and maintenance easier.
-//   2. Reference dependencies in build.gradle.kts files via `libs.<alias>`,
-//      improving readability and reducing duplication.
-//   3. Enable IDE support for version completion, inspection, and updates.
-//
-// Example usage in a subproject:
-//     dependencies {
-//         implementation(libs.common) // refers to version declared in libs.versions.toml
-//     }
-//
-// Notes:
-// - The file `gradle/libs.versions.toml` should live at the top level of the repo.
-// - Any new dependencies or version updates should be added there first.
-// - Multiple catalogs can be defined here if needed for different sets of dependencies.
-// - This approach is compatible with Gradle Kotlin DSL and provides better
-//   type-safe access than manually declaring string versions in each build file.
-println("DEBUG: Entering dependencyResolutionManagement block")
-
+/*
+ * --------------------------------------------------------------------------
+ * Dependency Resolution Management
+ * --------------------------------------------------------------------------
+ * Purpose:
+ *   - Centralizes dependency version control across all subprojects.
+ *   - Uses Gradle version catalogs for consistency and maintainability.
+ *
+ * Benefits:
+ *   1. Single source of truth for dependency versions (`gradle/libs.versions.toml`).
+ *   2. Type-safe access to dependencies via `libs.<alias>` in subprojects.
+ *   3. IDE assistance for version updates and dependency discovery.
+ *
+ * Example usage in subproject build.gradle.kts:
+ *     dependencies {
+ *         implementation(libs.common)
+ *     }
+ */
 dependencyResolutionManagement {
     versionCatalogs {
         val catalogName = "rumpusLibs"
         if (!this.names.contains(catalogName)) {
-            println("DEBUG: Creating version catalog '$catalogName'")
             create(catalogName) {
                 val catalogFile = file("gradle/rumpus.versions.toml")
-                println("DEBUG: About to call from($catalogFile)")
-                println("DEBUG: Stacktrace of from() call:")
-                Thread.currentThread().stackTrace.forEach { println(it) }
+                println("Loading version catalog from $catalogFile")
                 from(files(catalogFile))
             }
         } else {
@@ -131,16 +151,24 @@ dependencyResolutionManagement {
     }
 }
 
-println("DEBUG: Exiting dependencyResolutionManagement block")
-
-// --------------------------------------------------------------------------
-// Additional Notes
-// --------------------------------------------------------------------------
-// - This inline approach ensures full Kotlin DSL compatibility; `apply(from = ...)`
-//   cannot expose top-level functions in Kotlin DSL like in Groovy.
-// - All environment variables loaded here are available as `settings.extensions.extraProperties`.
-// - You can access them in subprojects via `rootProject.extra` if needed.
-
+/*
+ * --------------------------------------------------------------------------
+ * Lifecycle Debug Hooks
+ * --------------------------------------------------------------------------
+ * Useful for debugging dependency resolution and ensuring version catalogs
+ * are loaded as expected.
+ */
 gradle.settingsEvaluated {
     println("DEBUG: Settings evaluated, version catalogs currently: ${dependencyResolutionManagement.versionCatalogs.names}")
 }
+
+/*
+ * --------------------------------------------------------------------------
+ * Additional Notes
+ * --------------------------------------------------------------------------
+ * - All environment variables loaded here are accessible via
+ *   `settings.extensions.extraProperties`.
+ * - Subprojects can read them via `rootProject.extra`.
+ * - Add new environment keys to `.env` as needed; they will automatically
+ *   be exposed here at configuration time.
+ */

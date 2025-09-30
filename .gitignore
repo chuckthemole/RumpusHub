@@ -22,6 +22,8 @@
 !build-logic/**
 !gradle-helpers/
 !gradle-helpers/**
+!scripts/
+!scripts/**
 
 /dist/
 /build/
