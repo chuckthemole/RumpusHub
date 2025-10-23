@@ -1,97 +1,191 @@
 [versions]
-common = "1.1.5"
+# -------------------------
+# Core project versions
+# -------------------------
+common = "1.1.8"
 rumpus = "1.0.0"
-springBoot = "3.0.1"
-dependencyManagement = "1.1.0"
-junit = "5.8.1"
-junit4 = "4.13"
 java = "17"
-springCloudAws = "3.1.1"
-springJdbc = "3.0.1"
-springDataJpa = "3.3.3"
-mysqlConnector = "8.0.31"
-springDataRedis = "3.2.0"
-jedis = "5.1.2"
-jooq = "3.15.1"
-springSessionCore = "3.0.0"
-springSessionJdbc = "3.0.0"
-springBootStarterTest = "3.0.1"
-mockito = "4.2.0"
-springSecurityTest = "6.3.3"
 
+# -------------------------
+# Spring Boot / Web
+# -------------------------
+springBoot = "3.0.1"
 springBootWeb = "3.0.1"
 webFlux = "3.0.2"
 webSocket = "3.0.2"
 springSecurity = "3.0.2"
 oauth2Client = "3.0.2"
-jjwt = "0.12.6"
-devTools = "3.0.1"
+springCloudAws = "3.1.1"
+springJdbc = "3.0.1"
+springDataJpa = "3.3.3"
+springDataRedis = "3.2.0"
+springSessionCore = "3.0.0"
+springSessionJdbc = "3.0.0"
 jpa = "3.0.1"
 jdbc = "3.0.1"
-
-# Newly added versions (from missing implementation list)
+dependencyManagement = "1.1.0"
 springBootActuator = "3.0.1"
 springBootAdmin = "3.2.1"
-commonsValidator = "1.7"
-bootstrap = "5.2.3"
-htmlunit = "2.70.0"
-unirest = "3.11.13"
-jsr305 = "3.0.2"
-j2html = "1.6.0"
-jython = "2.7.2"
-tess4j = "5.13.0"
 oauth2ResourceServer = "3.5.0"
 
-# Project metadata
+# -------------------------
+# Database / Cache
+# -------------------------
+mysqlConnector = "8.0.31"
+jedis = "5.1.2"
+jooq = "3.15.1"
+
+# -------------------------
+# Security / JWT
+# -------------------------
+jjwt = "0.12.6"
+springSecurityTest = "6.3.3"
+
+# -------------------------
+# Testing
+# -------------------------
+junit = "5.8.1"
+junit4 = "4.13"
+springBootStarterTest = "3.0.1"
+mockito = "4.2.0"
+htmlunit = "2.70.0"
+unirest = "3.11.13"
+
+# -------------------------
+# Development / Tools
+# -------------------------
+devTools = "3.0.1"
+
+# -------------------------
+# OpenAPI / API Documentation
+# -------------------------
+springdocOpenApi = "2.2.0"
+
+# -------------------------
+# Validation / Utilities
+# -------------------------
+commonsValidator = "1.7"
+jsr305 = "3.0.2"
+
+# -------------------------
+# Frontend / UI
+# -------------------------
+bootstrap = "5.2.3"
+j2html = "1.6.0"
+
+# -------------------------
+# Scripting / External Languages
+# -------------------------
+jython = "2.7.2"
+tess4j = "5.13.0"
+
+# -------------------------
+# Project Metadata
+# -------------------------
+
+# Group for the main 'Rumpus' application
 rumpusGroup = "com.rumpus"
+
+# Group for the shared 'Common' library, which contains reusable utilities
+# and components used across multiple modules of the project
 commonGroup = "com.rumpushub.common"
 
 [libraries]
+# -------------------------
+# Core project modules
+# -------------------------
 common = { module = "com.rumpushub.common:common", version.ref = "common" }
+
+# -------------------------
+# Testing
+# -------------------------
 junit = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit4 = { module = "junit:junit", version.ref = "junit4" }
-springCloudAws = { module = "io.awspring.cloud:spring-cloud-aws", version.ref = "springCloudAws" }
-springCloudAwsS3 = { module = "io.awspring.cloud:spring-cloud-aws-starter-s3", version.ref = "springCloudAws" }
-springJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "springJdbc" }
-springDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "springDataJpa" }
-mysql = { module = "mysql:mysql-connector-java", version.ref = "mysqlConnector" }
-springDataRedis = { module = "org.springframework.data:spring-data-redis", version.ref = "springDataRedis" }
-jedis = { module = "redis.clients:jedis", version.ref = "jedis" }
-jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
-springSessionCore = { module = "org.springframework.session:spring-session-core", version.ref = "springSessionCore" }
-springSessionJdbc = { module = "org.springframework.session:spring-session-jdbc", version.ref = "springSessionJdbc" }
+junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 springBootStarterTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBootStarterTest" }
 mockito = { module = "org.mockito:mockito-inline", version.ref = "mockito" }
-junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+htmlunit = { module = "net.sourceforge.htmlunit:htmlunit", version.ref = "htmlunit" }
+unirest = { module = "com.konghq:unirest-java", version.ref = "unirest" }
 springSecurityTest = { module = "org.springframework.security:spring-security-test", version.ref = "springSecurityTest" }
 
+# -------------------------
+# Spring Boot / Web
+# -------------------------
 rumpusSpringBoot = { module = "org.springframework.boot:spring-boot-starter", version.ref = "springBoot" }
 springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBootWeb" }
 webFlux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "webFlux" }
 webSocket = { module = "org.springframework.boot:spring-boot-starter-websocket", version.ref = "webSocket" }
 springSecurity = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "springSecurity" }
 oauth2Client = { module = "org.springframework.boot:spring-boot-starter-oauth2-client", version.ref = "oauth2Client" }
-jjwtApi = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
-jjwtImpl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
-jjwtJackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
-devTools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "devTools" }
+springJdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "springJdbc" }
+springDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "springDataJpa" }
+springDataRedis = { module = "org.springframework.data:spring-data-redis", version.ref = "springDataRedis" }
+springSessionCore = { module = "org.springframework.session:spring-session-core", version.ref = "springSessionCore" }
+springSessionJdbc = { module = "org.springframework.session:spring-session-jdbc", version.ref = "springSessionJdbc" }
 jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "jpa" }
 jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "jdbc" }
-
-# Newly added libraries (from missing implementation list)
 springBootActuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "springBootActuator" }
 springBootAdminClient = { module = "de.codecentric:spring-boot-admin-starter-client", version.ref = "springBootAdmin" }
 springBootAdminServer = { module = "de.codecentric:spring-boot-admin-starter-server", version.ref = "springBootAdmin" }
+oauth2ResourceServer = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "oauth2ResourceServer" }
+springCloudAws = { module = "io.awspring.cloud:spring-cloud-aws", version.ref = "springCloudAws" }
+springCloudAwsS3 = { module = "io.awspring.cloud:spring-cloud-aws-starter-s3", version.ref = "springCloudAws" }
+
+# -------------------------
+# Database / Cache
+# -------------------------
+mysql = { module = "mysql:mysql-connector-java", version.ref = "mysqlConnector" }
+jedis = { module = "redis.clients:jedis", version.ref = "jedis" }
+jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
+
+# -------------------------
+# Security / JWT
+# -------------------------
+jjwtApi = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwtImpl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+jjwtJackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
+
+# -------------------------
+# Development / Tools
+# -------------------------
+devTools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "devTools" }
+
+# -------------------------
+# OpenAPI / API Documentation
+# -------------------------
+springdocOpenApi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdocOpenApi" }
+
+# -------------------------
+# Validation / Utilities
+# -------------------------
 commonsValidator = { module = "commons-validator:commons-validator", version.ref = "commonsValidator" }
-bootstrap = { module = "org.webjars:bootstrap", version.ref = "bootstrap" }
-htmlunit = { module = "net.sourceforge.htmlunit:htmlunit", version.ref = "htmlunit" }
-unirest = { module = "com.konghq:unirest-java", version.ref = "unirest" }
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
+
+# -------------------------
+# Frontend / UI
+# -------------------------
+bootstrap = { module = "org.webjars:bootstrap", version.ref = "bootstrap" }
 j2html = { module = "com.j2html:j2html", version.ref = "j2html" }
+
+# -------------------------
+# Scripting / External Languages
+# -------------------------
 jython = { module = "org.python:jython-standalone", version.ref = "jython" }
 tess4j = { module = "net.sourceforge.tess4j:tess4j", version.ref = "tess4j" }
-oauth2ResourceServer = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "oauth2ResourceServer" }
 
 [plugins]
+
+# -------------------------
+# Spring Boot Plugin
+# -------------------------
+# Provides tasks and conventions for building Spring Boot applications,
+# including packaging executable JARs, running the application, and managing dependencies.
 springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }
+
+# -------------------------
+# Dependency Management Plugin
+# -------------------------
+# Enables centralized management of dependency versions across modules.
+# Works well with Spring Boot to automatically align dependency versions.
 dependencyManagement = { id = "io.spring.dependency-management", version.ref = "dependencyManagement" }
+
