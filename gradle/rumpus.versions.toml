@@ -153,7 +153,8 @@ devTools = { module = "org.springframework.boot:spring-boot-devtools", version.r
 # -------------------------
 # OpenAPI / API Documentation
 # -------------------------
-springdocOpenApi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdocOpenApi" }
+openApiCore = { module = "org.springdoc:springdoc-openapi-starter-webmvc-api", version.ref = "springdocOpenApi" }
+openApiUi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdocOpenApi" }
 
 # -------------------------
 # Validation / Utilities
