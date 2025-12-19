@@ -1,0 +1,81 @@
+{
+    // =============================================================================
+    // VS Code Workspace Settings — Rumpus
+    // Last reviewed: 2025-12-19
+    //
+    // Notes:
+    // - This workspace contains multiple Gradle projects, frontends, and languages.
+    // - Settings are tuned to keep Java IntelliSense (JDT LS) stable and responsive.
+    // =============================================================================
+    // -----------------------------------------------------------------------------
+    // Java configuration
+    // -----------------------------------------------------------------------------
+    // Enable automatic null analysis where supported
+    "java.compile.nullAnalysis.mode": "automatic",
+    // Let VS Code re-import Gradle when build files change
+    "java.configuration.updateBuildConfiguration": "automatic",
+    // JVM options for the Java Language Server (JDT LS)
+    //
+    // The original configuration allocated a very large heap (8G) and included
+    // aggressive GC tuning. In large mixed-language repos, this can cause:
+    //   - Over-indexing of non-Java files
+    //   - Slow or stalled symbol resolution
+    //   - Missing "Go to Definition" links
+    //
+    // The simplified settings below are more stable for multi-module Gradle workspaces.
+    "java.jdt.ls.vmargs": "-Xmx4G -Xms256m",
+    // --- Original (commented out for reference) ---
+    // "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx8G -Xms100m -Xlog:disable",
+    // -----------------------------------------------------------------------------
+    // Java import / indexing exclusions
+    // -----------------------------------------------------------------------------
+    // Prevent the Java language server from scanning large, unrelated, or generated
+    // directories. This significantly improves performance and class resolution.
+    "java.import.exclusions": [
+        "**/node_modules/**",
+        "**/common-frontend/**",
+        "**/rumpus-frontend/**",
+        "**/rumpshift-frontend/**",
+        "**/pycommon/**",
+        "**/docs/**",
+        "**/tmp/**",
+        "**/.gradle/**"
+    ],
+    // -----------------------------------------------------------------------------
+    // Python configuration
+    // -----------------------------------------------------------------------------
+    // This was previously set to a repo-relative virtual environment.
+    // In mixed-language monorepos, this can increase workspace scanning overhead.
+    //
+    // Safe to re-enable if Python is actively developed in this workspace.
+    // "python.defaultInterpreterPath": "./rumpusenv/bin/python3",
+    // -----------------------------------------------------------------------------
+    // Editor formatting
+    // -----------------------------------------------------------------------------
+    // Disable format-on-save globally; formatting is handled explicitly or by tool.
+    "editor.formatOnSave": false,
+    // -----------------------------------------------------------------------------
+    // Kotlin / Gradle Kotlin DSL configuration
+    // -----------------------------------------------------------------------------
+    "[kotlin]": {
+        "editor.formatOnSave": false
+        // Optional formatter:
+        // "editor.defaultFormatter": "fwcd.kotlin"
+    },
+    // File associations to ensure correct syntax highlighting and language features
+    "files.associations": {
+        "*.gradle.kts": "kotlin",
+        "*.kt": "kotlin",
+        "settings.gradle.kts": "kotlin",
+        "build.gradle.kts": "kotlin",
+        "*.gradle": "groovy",
+        "settings.gradle": "groovy",
+        "build.gradle": "groovy"
+    },
+    // -----------------------------------------------------------------------------
+    // Groovy / Gradle Groovy DSL
+    // -----------------------------------------------------------------------------
+    "[groovy]": {
+        "editor.formatOnSave": false
+    }
+}
