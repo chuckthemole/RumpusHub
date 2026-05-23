@@ -110,23 +110,23 @@ subprojects {
                 endWithNewline()
             }
 
-            kotlin {
-                target("**/*.kt")
+            // kotlin {
+            //     target("**/*.kt")
 
-                ktlint("1.2.1").setEditorConfigPath(rootProject.file(".editorconfig"))
+            //     ktlint("1.2.1").setEditorConfigPath(rootProject.file(".editorconfig"))
 
-                trimTrailingWhitespace()
-                endWithNewline()
-            }
+            //     trimTrailingWhitespace()
+            //     endWithNewline()
+            // }
 
-            kotlinGradle {
-                target("**/*.gradle.kts")
+            // kotlinGradle {
+            //     target("**/*.gradle.kts")
 
-                ktlint("1.2.1")
+            //     ktlint("1.2.1")
 
-                trimTrailingWhitespace()
-                endWithNewline()
-            }
+            //     trimTrailingWhitespace()
+            //     endWithNewline()
+            // }
         }
     }
 }

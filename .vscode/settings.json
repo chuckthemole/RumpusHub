@@ -47,7 +47,7 @@
     "java.format.settings.url": ".vscode/java-formatter.xml",
     "java.format.settings.profile": "RumpusStyle",
     "editor.codeActionsOnSave": {
-        "source.organizeImports": true
+        "source.organizeImports": "explicit"
     },
     // -----------------------------------------------------------------------------
     // Python configuration
@@ -62,20 +62,22 @@
     // -----------------------------------------------------------------------------
     // Disable format-on-save globally; formatting is handled explicitly or by tool.
     "editor.formatOnSave": false,
+    //
     // -----------------------------------------------------------------------------
     // Kotlin / Gradle Kotlin DSL configuration
     // -----------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------
+    // Kotlin / Gradle Kotlin DSL configuration
+    // -----------------------------------------------------------------------------
+    "kotlin.formatter": "idea",
     "[kotlin]": {
-        "editor.formatOnSave": false
-        // Optional formatter:
-        // "editor.defaultFormatter": "fwcd.kotlin"
+        "editor.formatOnSave": false,
+        "editor.defaultFormatter": "JetBrains.kotlin-server"
     },
     // File associations to ensure correct syntax highlighting and language features
     "files.associations": {
         "*.gradle.kts": "kotlin",
         "*.kt": "kotlin",
-        "settings.gradle.kts": "kotlin",
-        "build.gradle.kts": "kotlin",
         "*.gradle": "groovy",
         "settings.gradle": "groovy",
         "build.gradle": "groovy"
