@@ -81,6 +81,11 @@ tasks.named("generateClasspathFile").configure {
 // - Applies only to projects that apply `org.gradle.api.plugins.JavaPlugin`.
 // - `rumpusLibs.versions.java.get()` should resolve to a string (e.g., "17").
 // ============================================================================
+
+plugins {
+    id("com.diffplug.spotless") apply false
+}
+
 subprojects {
     plugins.withType<org.gradle.api.plugins.JavaPlugin> {
         extensions.configure<org.gradle.api.plugins.JavaPluginExtension> {
@@ -89,6 +94,38 @@ subprojects {
                 languageVersion.set(
                     JavaLanguageVersion.of(rumpusLibs.versions.java.get())
                 )
+            }
+        }
+    }
+
+    plugins.withType<org.gradle.api.plugins.JavaPlugin> {
+        apply(plugin = "com.diffplug.spotless")
+
+        extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension>("spotless") {
+            java {
+                eclipse().configFile(rootProject.file(".vscode/java-formatter.xml"))
+
+                removeUnusedImports()
+                trimTrailingWhitespace()
+                endWithNewline()
+            }
+
+            kotlin {
+                target("**/*.kt")
+
+                ktlint("1.2.1").setEditorConfigPath(rootProject.file(".editorconfig"))
+
+                trimTrailingWhitespace()
+                endWithNewline()
+            }
+
+            kotlinGradle {
+                target("**/*.gradle.kts")
+
+                ktlint("1.2.1")
+
+                trimTrailingWhitespace()
+                endWithNewline()
             }
         }
     }

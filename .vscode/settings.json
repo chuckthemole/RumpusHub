@@ -1,12 +1,14 @@
 {
     // =============================================================================
     // VS Code Workspace Settings — Rumpus
-    // Last reviewed: 2025-12-19
+    // Last reviewed: 2026-5-123
     //
     // Notes:
     // - This workspace contains multiple Gradle projects, frontends, and languages.
     // - Settings are tuned to keep Java IntelliSense (JDT LS) stable and responsive.
     // =============================================================================
+    //
+    //
     // -----------------------------------------------------------------------------
     // Java configuration
     // -----------------------------------------------------------------------------
@@ -41,6 +43,12 @@
         "**/tmp/**",
         "**/.gradle/**"
     ],
+    // Formatting
+    "java.format.settings.url": ".vscode/java-formatter.xml",
+    "java.format.settings.profile": "RumpusStyle",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
     // -----------------------------------------------------------------------------
     // Python configuration
     // -----------------------------------------------------------------------------

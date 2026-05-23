@@ -1,5 +1,16 @@
 import java.io.File
 
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+
+    plugins {
+        id("com.diffplug.spotless") version "6.25.0"
+    }
+}
+
 /*
  * --------------------------------------------------------------------------
  * Environment Variable Loader (inline implementation)

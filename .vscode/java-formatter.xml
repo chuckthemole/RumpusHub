@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<profiles version="13">
+    <profile kind="CodeFormatterProfile" name="RumpusStyle" version="13">
+
+        <!-- =========================================
+             INDENTATION
+        ========================================== -->
+        <setting id="org.eclipse.jdt.core.formatter.tabulation.char" value="space" />
+        <setting id="org.eclipse.jdt.core.formatter.tabulation.size" value="4" />
+        <setting id="org.eclipse.jdt.core.formatter.indentation.size" value="4" />
+
+        <!-- =========================================
+             BRACES
+        ========================================== -->
+        <setting id="org.eclipse.jdt.core.formatter.brace_position_for_method_declaration"
+            value="end_of_line" />
+        <setting id="org.eclipse.jdt.core.formatter.brace_position_for_type_declaration"
+            value="end_of_line" />
+        <setting id="org.eclipse.jdt.core.formatter.brace_position_for_block"
+            value="end_of_line" />
+
+        <!-- =========================================
+             LINE WRAPPING - GLOBAL
+        ========================================== -->
+        <setting id="org.eclipse.jdt.core.formatter.lineSplit" value="100" />
+        <setting id="org.eclipse.jdt.core.formatter.wrap_before_binary_operator" value="true" />
+        <setting id="org.eclipse.jdt.core.formatter.join_wrapped_lines" value="false" />
+
+        <!-- =========================================
+             IMPORTS
+        ========================================== -->
+        <setting id="org.eclipse.jdt.core.formatter.import_order"
+            value="java;javax;org;com" />
+        <setting id="org.eclipse.jdt.core.formatter.sort_imports_by_exceptions"
+            value="true" />
+
+        <!-- =========================================
+             WHITESPACE
+        ========================================== -->
+        <setting
+            id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_method_declaration"
+            value="false" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_method_invocation_arguments"
+            value="true" />
+
+        <!-- =========================================
+             ANNOTATIONS
+        ========================================== -->
+        <setting
+            id="org.eclipse.jdt.core.formatter.insert_new_line_after_annotation"
+            value="insert" />
+
+        <!-- =========================================
+             TYPE PARAMETERS
+        ========================================== -->
+        <setting
+            id="org.eclipse.jdt.core.formatter.insert_new_line_after_type_parameters"
+            value="insert" />
+
+        <setting
+            id="org.eclipse.jdt.core.formatter.insert_space_after_comma_in_type_parameters"
+            value="insert" />
+
+        <setting
+            id="org.eclipse.jdt.core.formatter.wrap_before_comma_in_type_parameters"
+            value="true" />
+
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_type_parameters"
+            value="16" />
+
+        <!-- =========================================
+             METHOD PARAMETERS
+        ========================================== -->
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_method_declaration_parameters"
+            value="16" />
+
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_method_declaration_arguments"
+            value="16" />
+
+        <setting
+            id="org.eclipse.jdt.core.formatter.wrap_before_comma_in_method_declaration_parameters"
+            value="true" />
+
+        <setting
+            id="org.eclipse.jdt.core.formatter.insert_new_line_after_opening_paren_in_method_declaration"
+            value="insert" />
+
+        <setting
+            id="org.eclipse.jdt.core.formatter.insert_new_line_before_closing_paren_in_method_declaration"
+            value="insert" />
+
+        <!-- =========================================
+             METHOD INVOCATIONS
+        ========================================== -->
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_method_invocation_arguments"
+            value="16" />
+
+        <setting
+            id="org.eclipse.jdt.core.formatter.wrap_before_comma_in_method_invocation_arguments"
+            value="true" />
+
+        <!-- =========================================
+             CLEAN STRUCTURE
+        ========================================== -->
+        <setting
+            id="org.eclipse.jdt.core.formatter.blank_lines_before_method"
+            value="1" />
+
+        <setting
+            id="org.eclipse.jdt.core.formatter.blank_lines_before_new_chunk"
+            value="1" />
+
+    </profile>
+</profiles>
