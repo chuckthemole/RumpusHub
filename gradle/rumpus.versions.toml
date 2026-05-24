@@ -80,6 +80,11 @@ jython = "2.7.2"
 tess4j = "5.13.0"
 
 # -------------------------
+# Formatting
+# -------------------------
+spotless = "6.25.0"
+
+# -------------------------
 # Project Metadata
 # -------------------------
 
@@ -173,6 +178,11 @@ j2html = { module = "com.j2html:j2html", version.ref = "j2html" }
 # -------------------------
 jython = { module = "org.python:jython-standalone", version.ref = "jython" }
 tess4j = { module = "net.sourceforge.tess4j:tess4j", version.ref = "tess4j" }
+
+# -------------------------
+# Formatting
+# -------------------------
+spotless = {module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref ="spotless" }
 
 [plugins]
 
