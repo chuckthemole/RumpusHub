@@ -18,8 +18,6 @@
 !README.md
 !init.sh
 
-!build-logic/
-!build-logic/**
 !gradle-helpers/
 !gradle-helpers/**
 !scripts/
@@ -30,6 +28,7 @@
 !static/**
 !.vscode/
 !.vscode/**
+!.editorconfig
 
 /dist/
 /build/
