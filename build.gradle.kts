@@ -1,4 +1,13 @@
 // ============================================================================
+// Root build.gradle.kts
+// ============================================================================
+
+repositories {
+  mavenCentral()
+  gradlePluginPortal()
+}
+
+// ============================================================================
 // Task: generateClasspathFile
 // ============================================================================
 // Purpose:
@@ -23,24 +32,25 @@
 // classpath, developer tools can load projects faster.
 // ============================================================================
 tasks.register("generateClasspathFile") {
-    // Ensure all subprojects have compiled sources before generating classpath
-    dependsOn(subprojects.map { it.tasks.matching { it.name == "classes" } })
+  // Ensure all subprojects have compiled sources before generating classpath
+  dependsOn(subprojects.map { it.tasks.matching { it.name == "classes" } })
 
-    doLast {
-        // Collect runtime classpath entries from all subprojects
-        val classpath = subprojects
+  doLast {
+    // Collect runtime classpath entries from all subprojects
+    val classpath =
+        subprojects
             .flatMap { it.the<SourceSetContainer>()["main"].runtimeClasspath.files }
             .map { it.absolutePath }
             .joinToString(System.getProperty("path.separator"))
 
-        // Define output file location
-        val classpathFile = file("$buildDir/jdtls_classpath")
+    // Define output file location
+    val classpathFile = file("$buildDir/jdtls_classpath")
 
-        // Write flattened classpath string to disk
-        classpathFile.writeText(classpath)
+    // Write flattened classpath string to disk
+    classpathFile.writeText(classpath)
 
-        println("Classpath file generated at: $classpathFile")
-    }
+    println("Classpath file generated at: $classpathFile")
+  }
 }
 
 // ============================================================================
@@ -51,12 +61,9 @@ tasks.register("generateClasspathFile") {
 // when configuring external tools like JDTLS.
 // ============================================================================
 tasks.named("generateClasspathFile").configure {
-    doLast {
-        println(
-            "Classpath for JDTLS created at: " +
-            file("$buildDir/jdtls_classpath").absolutePath
-        )
-    }
+  doLast {
+    println("Classpath for JDTLS created at: " + file("$buildDir/jdtls_classpath").absolutePath)
+  }
 }
 
 // ============================================================================
@@ -82,51 +89,19 @@ tasks.named("generateClasspathFile").configure {
 // - `rumpusLibs.versions.java.get()` should resolve to a string (e.g., "17").
 // ============================================================================
 
-plugins {
-    id("com.diffplug.spotless") apply false
-}
+// Apply in root repo
+plugins { id("com.rumpushub.spotless") }
 
 subprojects {
-    plugins.withType<org.gradle.api.plugins.JavaPlugin> {
-        extensions.configure<org.gradle.api.plugins.JavaPluginExtension> {
-            toolchain {
-                // Apply consistent Java version from version catalog
-                languageVersion.set(
-                    JavaLanguageVersion.of(rumpusLibs.versions.java.get())
-                )
-            }
-        }
+  plugins.withType<org.gradle.api.plugins.JavaPlugin> {
+    extensions.configure<org.gradle.api.plugins.JavaPluginExtension> {
+      toolchain {
+        // Apply consistent Java version from version catalog
+        languageVersion.set(JavaLanguageVersion.of(rumpusLibs.versions.java.get()))
+      }
     }
+  }
 
-    plugins.withType<org.gradle.api.plugins.JavaPlugin> {
-        apply(plugin = "com.diffplug.spotless")
-
-        extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension>("spotless") {
-            java {
-                eclipse().configFile(rootProject.file(".vscode/java-formatter.xml"))
-
-                removeUnusedImports()
-                trimTrailingWhitespace()
-                endWithNewline()
-            }
-
-            // kotlin {
-            //     target("**/*.kt")
-
-            //     ktlint("1.2.1").setEditorConfigPath(rootProject.file(".editorconfig"))
-
-            //     trimTrailingWhitespace()
-            //     endWithNewline()
-            // }
-
-            // kotlinGradle {
-            //     target("**/*.gradle.kts")
-
-            //     ktlint("1.2.1")
-
-            //     trimTrailingWhitespace()
-            //     endWithNewline()
-            // }
-        }
-    }
+  // Apply in sub projects
+  plugins.apply("com.rumpushub.spotless")
 }

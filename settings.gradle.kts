@@ -1,16 +1,5 @@
 import java.io.File
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
-    }
-
-    plugins {
-        id("com.diffplug.spotless") version "6.25.0"
-    }
-}
-
 /*
  * --------------------------------------------------------------------------
  * Environment Variable Loader (inline implementation)
@@ -36,21 +25,21 @@ val parentDir = rootDir.parentFile
 val envFile = File(rootDir, ".env").takeIf { it.exists() } ?: File(parentDir, ".env")
 
 if (envFile.exists()) {
-    println("EnvLoader: Found .env file at ${envFile.absolutePath}")
-    envFile.forEachLine { line ->
-        val trimmed = line.trim()
-        if (trimmed.isNotEmpty() && !trimmed.startsWith("#") && trimmed.contains("=")) {
-            val (rawKey, rawValue) = trimmed.split("=", limit = 2)
-            val key = rawKey.trim()
-            val value = rawValue.trim().removeSurrounding("\"").removeSurrounding("'")
-            println("EnvLoader: Setting settings.extraProperties property: $key = $value")
-            settings.extensions.extraProperties.set(key, value)
-        } else {
-            println("EnvLoader: Skipping line: '$line'")
-        }
+  println("EnvLoader: Found .env file at ${envFile.absolutePath}")
+  envFile.forEachLine { line ->
+    val trimmed = line.trim()
+    if (trimmed.isNotEmpty() && !trimmed.startsWith("#") && trimmed.contains("=")) {
+      val (rawKey, rawValue) = trimmed.split("=", limit = 2)
+      val key = rawKey.trim()
+      val value = rawValue.trim().removeSurrounding("\"").removeSurrounding("'")
+      println("EnvLoader: Setting settings.extraProperties property: $key = $value")
+      settings.extensions.extraProperties.set(key, value)
+    } else {
+      println("EnvLoader: Skipping line: '$line'")
     }
+  }
 } else {
-    println("EnvLoader: No .env file found in $rootDir or $parentDir")
+  println("EnvLoader: No .env file found in $rootDir or $parentDir")
 }
 
 /*
@@ -68,18 +57,18 @@ if (envFile.exists()) {
  */
 val env: String =
     if (settings.extensions.extraProperties.has("ENV")) {
-        settings.extensions.extraProperties["ENV"] as String
+      settings.extensions.extraProperties["ENV"] as String
     } else {
-        "DEV"
+      "DEV"
     }
 
 println("settings.gradle.kts: Using environment = $env")
 
 val heap: String =
     if (settings.extensions.extraProperties.has("HEAP")) {
-        settings.extensions.extraProperties["HEAP"] as String
+      settings.extensions.extraProperties["HEAP"] as String
     } else {
-        "LIMITED_HEAP"
+      "LIMITED_HEAP"
     }
 
 println("settings.gradle.kts: Using heap configuration = $heap")
@@ -92,7 +81,16 @@ println("settings.gradle.kts: Using heap configuration = $heap")
  * Gradle automatically resolves `:projectName` to a folder of the same name.
  */
 include(":rumpus")
+
 include(":admin")
+
+pluginManagement {
+  includeBuild("build-logic")
+  repositories {
+    gradlePluginPortal()
+    mavenCentral()
+  }
+}
 
 /*
  * --------------------------------------------------------------------------
@@ -120,13 +118,12 @@ include(":admin")
  *   - Explicitly sets `projectDir` for clarity, though not strictly required
  *     if directory name matches project name.
  */
-val isPublishing: Boolean = gradle.startParameter.taskNames.any { task ->
-    task.contains("publish", ignoreCase = true)
-}
+val isPublishing: Boolean =
+    gradle.startParameter.taskNames.any { task -> task.contains("publish", ignoreCase = true) }
 
 if (env == "DEV" || isPublishing) {
-    include(":common")
-    project(":common").projectDir = File(rootDir, "common")
+  include(":common")
+  project(":common").projectDir = File(rootDir, "common")
 }
 
 /*
@@ -148,18 +145,18 @@ if (env == "DEV" || isPublishing) {
  *     }
  */
 dependencyResolutionManagement {
-    versionCatalogs {
-        val catalogName = "rumpusLibs"
-        if (!this.names.contains(catalogName)) {
-            create(catalogName) {
-                val catalogFile = file("gradle/rumpus.versions.toml")
-                println("Loading version catalog from $catalogFile")
-                from(files(catalogFile))
-            }
-        } else {
-            println("DEBUG: Version catalog '$catalogName' already exists")
-        }
+  versionCatalogs {
+    val catalogName = "rumpusLibs"
+    if (!this.names.contains(catalogName)) {
+      create(catalogName) {
+        val catalogFile = file("gradle/rumpus.versions.toml")
+        println("Loading version catalog from $catalogFile")
+        from(files(catalogFile))
+      }
+    } else {
+      println("DEBUG: Version catalog '$catalogName' already exists")
     }
+  }
 }
 
 /*
@@ -170,16 +167,18 @@ dependencyResolutionManagement {
  * are loaded as expected.
  */
 gradle.settingsEvaluated {
-    println("DEBUG: Settings evaluated, version catalogs currently: ${dependencyResolutionManagement.versionCatalogs.names}")
+  println(
+      "DEBUG: Settings evaluated, version catalogs currently: ${dependencyResolutionManagement.versionCatalogs.names}",
+  )
 }
 
 /*
- * --------------------------------------------------------------------------
- * Additional Notes
- * --------------------------------------------------------------------------
- * - All environment variables loaded here are accessible via
- *   `settings.extensions.extraProperties`.
- * - Subprojects can read them via `rootProject.extra`.
- * - Add new environment keys to `.env` as needed; they will automatically
- *   be exposed here at configuration time.
- */
+  * --------------------------------------------------------------------------
+  * Additional Notes
+  * --------------------------------------------------------------------------
+  * - All environment variables loaded here are accessible via
+  *   `settings.extensions.extraProperties`.
+  * - Subprojects can read them via `rootProject.extra`.
+  * - Add new environment keys to `.env` as needed; they will automatically
+  *   be exposed here at configuration time.
+  */
