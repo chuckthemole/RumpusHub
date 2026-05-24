@@ -1,0 +1,71 @@
+# ==============================================================================
+# EditorConfig — Rumpus Monorepo
+# ==============================================================================
+#
+# Purpose
+# -------
+# Provides consistent editor behavior across IDEs, operating systems,
+# and contributors.
+#
+# Supported Editors
+# -----------------
+# - VS Code
+# - IntelliJ IDEA
+# - Android Studio
+# - Vim / Neovim
+# - Sublime Text
+# - Any editor with EditorConfig support
+#
+# Notes
+# -----
+# - Kotlin formatting is handled primarily by Spotless + ktfmt.
+# - ktfmt intentionally ignores most indentation-related EditorConfig settings.
+# - This file therefore focuses on universal whitespace and newline behavior.
+#
+# References
+# ----------
+# https://editorconfig.org/
+# ==============================================================================
+
+# Treat this file as the root EditorConfig for the repository.
+# EditorConfig files in parent directories will be ignored.
+root = true
+
+# ==============================================================================
+# Global Defaults
+# ==============================================================================
+#
+# Applies to all files unless overridden by a more specific section.
+# ==============================================================================
+
+[*]
+
+# Use UTF-8 encoding consistently across platforms and editors.
+charset = utf-8
+
+# Force Unix-style LF line endings.
+# Prevents CRLF/LF churn between macOS/Linux/Windows contributors.
+end_of_line = lf
+
+# Ensure all files end with a trailing newline.
+# Recommended by POSIX tools and Git.
+insert_final_newline = true
+
+# Remove unnecessary trailing spaces automatically.
+trim_trailing_whitespace = true
+
+# ==============================================================================
+# Kotlin / Gradle Kotlin DSL
+# ==============================================================================
+#
+# Formatting is primarily controlled by:
+#   Spotless -> ktfmt()
+#
+# ktfmt is intentionally opinionated and ignores most indentation settings.
+# We only define max line length here for editor guidance and readability.
+# ==============================================================================
+
+[*.{kt,kts}]
+
+# Preferred soft line-length guideline for Kotlin source and Gradle Kotlin DSL.
+max_line_length = 140
