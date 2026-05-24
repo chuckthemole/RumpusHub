@@ -85,11 +85,74 @@ include(":rumpus")
 include(":admin")
 
 pluginManagement {
-  includeBuild("build-logic")
-  repositories {
-    gradlePluginPortal()
-    mavenCentral()
-  }
+
+    // -------------------------------------------------------------------------
+    // Included build
+    // -------------------------------------------------------------------------
+    // build-logic is your composite build containing all convention plugins.
+    // This allows you to develop Gradle plugins in the same repo and
+    // use them as if they were published artifacts.
+    includeBuild("build-logic")
+
+    // -------------------------------------------------------------------------
+    // Plugin repositories
+    // -------------------------------------------------------------------------
+    // These repositories are used ONLY for resolving Gradle plugins
+    // (e.g. Spring Boot plugin, dependency-management plugin, Spotless, etc.)
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+
+    // -------------------------------------------------------------------------
+    // Repository safety mode
+    // -------------------------------------------------------------------------
+    // FAIL_ON_PROJECT_REPOS enforces a strict rule:
+    // No subproject is allowed to declare its own repositories block.
+    //
+    // Why this matters:
+    // - Prevents inconsistent dependency resolution across modules
+    // - Avoids hidden Maven repositories in random build files
+    // - Makes builds reproducible and CI-safe
+    // - Forces all dependency sources to be declared centrally here
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
+    // -------------------------------------------------------------------------
+    // Dependency repositories
+    // -------------------------------------------------------------------------
+    // These repositories are used for ALL project dependencies unless a
+    // plugin explicitly introduces additional logic.
+    //
+    // Order matters only for resolution preference; generally:
+    // - Maven Central first (most stable, standard artifacts)
+    // - Gradle Plugin Portal included for any dependency-style plugins
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+
+        val env = providers.gradleProperty("ENV").orNull ?: "DEV"
+
+        when (env) {
+            "LIVE" -> maven {
+                url = uri("https://maven.pkg.github.com/chuckthemole/common")
+                credentials {
+                    username = providers.gradleProperty("GPR_USER").orNull
+                        ?: System.getenv("GPR_USER")
+                    password = providers.gradleProperty("GPR_TOKEN").orNull
+                        ?: System.getenv("GPR_TOKEN")
+                }
+            }
+
+            "BETA" -> maven {
+                url = uri(rootDir.resolve("TestRepo"))
+            }
+
+            "DEV" -> mavenLocal()
+        }
+    }
 }
 
 /*
