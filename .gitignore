@@ -29,6 +29,8 @@
 !.vscode/
 !.vscode/**
 !.editorconfig
+!config/
+!config/**
 
 /dist/
 /build/
