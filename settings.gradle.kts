@@ -1,5 +1,7 @@
 import java.io.File
 
+rootProject.name = "Rumpus"
+
 /*
  * --------------------------------------------------------------------------
  * Environment Variable Loader (inline implementation)
