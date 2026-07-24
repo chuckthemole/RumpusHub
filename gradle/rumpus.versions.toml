@@ -117,6 +117,7 @@ springSecurityTest = { module = "org.springframework.security:spring-security-te
 # Spring Boot / Web
 # -------------------------
 rumpusSpringBoot = { module = "org.springframework.boot:spring-boot-starter", version.ref = "springBoot" }
+springBootValidation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "springBoot" }
 springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBootWeb" }
 webFlux = { module = "org.springframework.boot:spring-boot-starter-webflux", version.ref = "webFlux" }
 webSocket = { module = "org.springframework.boot:spring-boot-starter-websocket", version.ref = "webSocket" }
